@@ -1,0 +1,138 @@
+var enableInlineVideo = function() { "use strict";
+
+    function A(A, g, I, C) {
+        function e(I) { t = g(e, C), A(I - (i || I)), i = I } var t, i; return { start: function() { t || e(0) }, stop: function() { I(t), t = null, i = 0 } } }
+
+    function g(g) { return A(g, requestAnimationFrame, cancelAnimationFrame) }
+
+    function I(A, g, I, C) {
+        function e(g) { Boolean(A[I]) === Boolean(C) && g.stopImmediatePropagation(), delete A[I] } return A.addEventListener(g, e, !1), e }
+
+    function C(A, g, I, C) {
+        function e() { return I[g] }
+
+        function t(A) { I[g] = A } C && t(A[g]), Object.defineProperty(A, g, { get: e, set: t }) }
+
+    function e(A, g, I) { I.addEventListener(g, function() { return A.dispatchEvent(new Event(g)) }) }
+
+    function t(A, g) { Promise.resolve().then(function() { A.dispatchEvent(new Event(g)) }) }
+
+    function i(A) { var g = new Audio; return e(A, "play", g), e(A, "playing", g), e(A, "pause", g), g.crossOrigin = A.crossOrigin, g.src = A.src || A.currentSrc || "data:", g }
+
+    function n(A, g, I) {
+        (s || 0) + 200 < Date.now() && (A[Z] = !0, s = Date.now()), I || (A.currentTime = g), v[++b % 3] = 100 * g | 0 }
+
+    function d(A) { return A.driver.currentTime >= A.video.duration }
+
+    function o(A) { var g = this;
+        g.video.readyState >= g.video.HAVE_FUTURE_DATA ? (g.hasAudio || (g.driver.currentTime = g.video.currentTime + A * g.video.playbackRate / 1e3, g.video.loop && d(g) && (g.driver.currentTime = 0)), n(g.video, g.driver.currentTime)) : g.video.networkState === g.video.NETWORK_IDLE && 0 === g.video.buffered.length && g.video.load(), g.video.ended && (delete g.video[Z], g.video.pause(!0)) }
+
+    function r() { var A = this,
+            g = A[p]; return A.webkitDisplayingFullscreen ? void A[G]() : ("data:" !== g.driver.src && g.driver.src !== A.src && (n(A, 0, !0), g.driver.src = A.src), void(A.paused && (g.paused = !1, 0 === A.buffered.length && A.load(), g.driver.play(), g.updater.start(), g.hasAudio || (t(A, "play"), g.video.readyState >= g.video.HAVE_ENOUGH_DATA && t(A, "playing"))))) }
+
+    function a(A) { var g = this,
+            I = g[p];
+        I.driver.pause(), I.updater.stop(), g.webkitDisplayingFullscreen && g[h](), I.paused && !A || (I.paused = !0, I.hasAudio || t(g, "pause"), g.ended && (g[Z] = !0, t(g, "ended"))) }
+
+    function c(A, I) { var C = A[p] = {};
+        C.paused = !0, C.hasAudio = I, C.video = A, C.updater = g(o.bind(C)), I ? C.driver = i(A) : (A.addEventListener("canplay", function() { A.paused || t(A, "playing") }), C.driver = { src: A.src || A.currentSrc || "data:", muted: !0, paused: !0, pause: function() { C.driver.paused = !0 }, play: function() { C.driver.paused = !1, d(C) && n(A, 0) }, get ended() { return d(C) } }), A.addEventListener("emptied", function() { var g = !C.driver.src || "data:" === C.driver.src;
+            C.driver.src && C.driver.src !== A.src && (n(A, 0, !0), C.driver.src = A.src, g ? C.driver.play() : C.updater.stop()) }, !1), A.addEventListener("webkitbeginfullscreen", function() { A.paused ? I && 0 === C.driver.buffered.length && C.driver.load() : (A.pause(), A[G]()) }), I && (A.addEventListener("webkitendfullscreen", function() { C.driver.currentTime = A.currentTime }), A.addEventListener("seeking", function() { v.indexOf(100 * A.currentTime | 0) < 0 && (C.driver.currentTime = A.currentTime) })) }
+
+    function u(A) { var g = A[p];
+        A[G] = A.play, A[h] = A.pause, A.play = r, A.pause = a, C(A, "paused", g.driver), C(A, "muted", g.driver, !0), C(A, "playbackRate", g.driver, !0), C(A, "ended", g.driver), C(A, "loop", g.driver, !0), I(A, "seeking"), I(A, "seeked"), I(A, "timeupdate", Z, !1), I(A, "ended", Z, !1) }
+
+    function l(A, g) { if (void 0 === g && (g = {}), !A[p]) { if (!g.everywhere) { if (!m) return; if (!(g.iPad || g.ipad ? /iPhone|iPod|iPad/ : /iPhone|iPod/).test(navigator.userAgent)) return }!A.paused && A.webkitDisplayingFullscreen && A.pause(), c(A, !g.muted), u(A), A.classList.add("IIV"), A.muted && A.autoplay && A.play(), /iPhone|iPod|iPad/.test(navigator.platform) || console.warn("iphone-inline-video is not guaranteed to work in emulated environments") } } var s, m = "object" == typeof document && "object-fit" in document.head.style && !matchMedia("(-webkit-video-playable-inline)").matches,
+        p = "bfred-it:iphone-inline-video",
+        Z = "bfred-it:iphone-inline-video:event",
+        G = "bfred-it:iphone-inline-video:nativeplay",
+        h = "bfred-it:iphone-inline-video:nativepause",
+        v = [],
+        b = 0; return l }();
+! function(A) {
+    function g(A) {
+        function g() { O = !!A.loop && A.loop, N = !!A.muted && A.muted, z = A.poster ? A.poster : void 0, R = A.onStart ? A.onStart : void 0, j = A.onLoadedProgress ? A.onLoadedProgress : void 0, D = A.onLoadedComplete ? A.onLoadedComplete : void 0, Q = A.onEnd ? A.onEnd : void 0, E = A.timesParam ? A.timesParam : void 0, Y = A.onTimes ? A.onTimes : void 0, W = !!A.tryMultipleVideoPlayAtTheSameTime && A.tryMultipleVideoPlayAtTheSameTime; var g = " .IIV::-webkit-media-controls-play-button,   .IIV::-webkit-media-controls-start-playback-button {  opacity: 0;    pointer-events: none;    width: 5px;}";
+            I(g), v("init", "瑙嗛缁勪欢鍒濆鍖�"), E && 0 == E.length || v("setTimesParam", "璁剧疆鏃堕棿鑺傜偣"), f = A.src, y = A.videoElement, y.setAttribute("preload", "auto"), y.setAttribute("x-webkit-airplay", "true"), y.setAttribute("airplay", "allow"), y.setAttribute("webkit-playsinline", "true"), y.setAttribute("playsinline", "true"), y.addEventListener("canplay", n), y.addEventListener("canplaythrough", n), y.addEventListener("timeupdate", n), y.addEventListener("ended", n), y.addEventListener("abort", n), y.addEventListener("durationchange", n), y.addEventListener("emptied", n), y.addEventListener("error", n), y.addEventListener("loadeddata", n), y.addEventListener("loadedmetadata", n), y.addEventListener("loadstart", n), y.addEventListener("pause", n), y.addEventListener("play", n), y.addEventListener("playing", n), y.addEventListener("ratechange", n), y.addEventListener("seeked", n), y.addEventListener("seeking", n), y.addEventListener("stalled", n), y.addEventListener("suspend", n), y.addEventListener("volumechange", n), y.addEventListener("waiting", n), y.muted = N, z && (y.poster = z), e() }
+
+        function I(A) { var g = document.getElementsByTagName("head")[0],
+                I = document.createElement("style"),
+                C = document.createTextNode(A);
+            I.type = "text/css", I.styleSheet ? I.styleSheet.cssText = C.nodeValue : I.appendChild(C), g.appendChild(I) }
+
+        function C(A, g) { var I = document.createElement("img"),
+                C = "https://pingfore.qq.com/pingd?dm=" + A + ".hot&url=/&arg=-&hottag=" + encodeURIComponent(g) + "&hotx=9999&hoty=9999&rand=" + Math.random() + "&tgmobileshare=1";
+            I.setAttribute("src", C), I.setAttribute("style", "display:none;position:fixed;left:-999999px;top:-999999px;width:0;height:0;"), document.body.appendChild(I) }
+
+        function e() { B = setInterval(function() { if ("function" == typeof PTTSendClick) { clearInterval(B); for (var A = 0; A < K.length; A++) v(K[A][0], K[A][1]) } }, 1e3) }
+
+        function t() { J && (J = !1, y.src = f, u(), l() && (W ? (V = !0, console.log("video.muted:", y.muted, N), enableInlineVideo(y, { muted: N })) : "iosOther" == p() || ("ios8" == p() || "ios7" == p() || "ios6" == p() || "ios5" == p() ? (V = !0, enableInlineVideo(y, { muted: N })) : m() || s() || (V = !0, enableInlineVideo(y, { muted: N })))), i()) }
+
+        function i() { E && E.length > 0 ? (H = !0, a()) : H = !1 }
+
+        function n(A) { if (!M()) switch ("timeupdate" != A.type, A.type) {
+                case "seeking":
+                    break;
+                case "seeked":
+                    break;
+                case "canplaythrough":
+                    break;
+                case "waiting":
+                    break;
+                case "canplay":
+                    S && y.pause(); break;
+                case "timeupdate":
+                    y.currentTime > 0 && c(A); break;
+                case "loadedmetadata":
+                    break;
+                case "ended":
+                    v("ended", "鎾斁瀹屾垚"), Q && Q({ target: X, id: y.id }), X.loop && X.replay() } }
+
+        function d() { if (!M() && E)
+                for (var A = 0; A < E.length; A++) E[A].trigger || r(y.currentTime, E[A].time) && (E[A].trigger = !0, o(A, E), Y && Y(E[A].name)) }
+
+        function o(A, g) { if (g && 0 != g.length)
+                for (var I = 0; I < g.length; I++) I != A && g[I].trigger && (g[I].trigger = !1) }
+
+        function r(A, g) { A = (100 * A >> 0) / 100; var I = !1,
+                C = .03; return A < g + C && A > g - 15 * C && (I = !0), I }
+
+        function a() { H && (requestAnimFrame(a), d()) }
+
+        function c(A) { F || ("none" == y.style.display && (y.style.display = "block"), Z() ? "timeupdate" == A.type && R && P && (P = !1, v("start", "寮€濮嬫挱鏀�"), R({ target: X, id: y.id })) : R && P && (P = !1, v("start", "寮€濮嬫挱鏀�"), R({ target: X, id: y.id }), u())) }
+
+        function u() { M() || (clearInterval(w), (D || j) && (w = setInterval(function() { return x ? void clearInterval(w) : void(y.buffered.length > 0 && (j && j({ target: X, id: y.id, progress: y.buffered.end(y.buffered.length - 1) }), y.buffered.end(y.buffered.length - 1) >= y.duration + (l() || Z() ? 0 : -.5) && (D && D({ target: X, id: y.id }), clearInterval(w)))) }, 30))) }
+
+        function l() { var A = navigator.userAgent,
+                g = !!A.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); return g }
+
+        function s() { var A = navigator.userAgent; return "MicroMessenger" == A.match(/MicroMessenger/i) }
+
+        function m() { var A = navigator.userAgent; return "QQ/" == A.match(/QQ\//i) }
+
+        function p() { var A = window.navigator.userAgent.toLowerCase(),
+                g = ""; if (A.indexOf("iphone") >= 0) return g = A.indexOf("os 11") > 0 ? "ios11s" : A.indexOf("os 10") >= 0 ? "ios10s" : A.indexOf("os 9") >= 0 ? "ios9s" : A.indexOf("os 8") >= 0 ? "ios8" : A.indexOf("os 7") >= 0 ? "ios7" : A.indexOf("os 6") > 0 ? "ios6" : A.indexOf("os 5") > 0 ? "ios5" : "iosOther" }
+
+        function Z() { var A = navigator.userAgent,
+                g = A.indexOf("Android") > -1 || A.indexOf("Adr") > -1; return g }
+
+        function G(A) { s() && l() ? "object" == typeof WeixinJSBridge ? WeixinJSBridge.invoke("WeixinJSBridgeReady", {}, function(g) { A() }) : document.addEventListener("WeixinJSBridgeReady", function(g) { A() }, !1) : A() }
+
+        function h() { var A = !1; return l() && (A = "ios8" != p() && "ios7" != p() && "ios6" != p() && "ios5" != p() && ("iosOther" == p() || !(!s() && !m()))), A }
+
+        function v(A, g) { if ("function" == typeof PTTSendClick) { PTTSendClick("mmdVideoPlayer", String(A), String(g)); for (var I = window.location.hostname.split("."), e = window.location.pathname.split("/"), t = I.concat(e), i = "", n = 0; n < t.length; n++) 1 == t[n].split(".").length && "" != t[n] && (i += t[n] + "_");
+                i = i.substr(0, i.length - 1), i = "mmd_videoPlayer." + i + "." + String(A), C("tgideas.qq.com", i) } else K.push([A, g]) }
+
+        function b() { G(function() { V ? y.play() : Z() ? y.play() : y.play() }), v("load", "寮€濮嬬紦鍐�") }
+
+        function M() { var A = !1; return (U || x) && (A = !0), A } var y, f, R, Q, j, D, Y, E, W, w, N, L, O, T, k, z, B, P = !0,
+            J = !0,
+            V = !1,
+            S = !0,
+            F = !1,
+            U = !1,
+            x = !1,
+            H = !1,
+            K = [],
+            X = this,
+            q = "data:video/mp4;base64,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LmFkb2JlLmNvbS94YXAvMS4wL21tLyIKICAgIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiCiAgICB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIKICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1wOkNyZWF0ZURhdGU9IjIwMTYtMDktMDJUMTQ6MjY6MDYrMDg6MDAiCiAgIHhtcDpNb2RpZnlEYXRlPSIyMDE2LTA5LTAyVDE0OjI2OjA2KzA4OjAwIgogICB4bXA6TWV0YWRhdGFEYXRlPSIyMDE2LTA5LTAyVDE0OjI2OjA2KzA4OjAwIgogICB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIEFmdGVyIEVmZmVjdHMgQ0MgMjAxNCAoV2luZG93cykiCiAgIHhtcERNOnZpZGVvRnJhbWVSYXRlPSIzMC4wMDAwMDAiCiAgIHhtcERNOnZpZGVvRmllbGRPcmRlcj0iUHJvZ3Jlc3NpdmUiCiAgIHhtcERNOnZpZGVvUGl4ZWxBc3BlY3RSYXRpbz0iMS8xIgogICB4bXBETTpzdGFydFRpbWVTY2FsZT0iMzAiCiAgIHhtcERNOnN0YXJ0VGltZVNhbXBsZVNpemU9IjEiCiAgIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzQ0NGJmMjQtZDU5NS1mMDQ2LWFhYzktM2M3YWJjNzAwNzAwIgogICB4bXBNTTpEb2N1bWVudElEPSI3YTY1Mjg5Yi01YzFiLWFiOWQtZjZkZS0yNjkzMDAwMDAwMzUiCiAgIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphMWFjZWE0Ny0wYTg2LWMxNDAtYTgyOS1lMmJjYzQ2NWU2Y2EiCiAgIGRjOmZvcm1hdD0iSC4yNjQiPgogICA8eG1wRE06ZHVyYXRpb24KICAgIHhtcERNOnZhbHVlPSIyNzMwMDAiCiAgICB4bXBETTpzY2FsZT0iMS85MDAwMCIvPgogICA8eG1wRE06c3RhcnRUaW1lY29kZQogICAgeG1wRE06dGltZUZvcm1hdD0iMzBUaW1lY29kZSIKICAgIHhtcERNOnRpbWVWYWx1ZT0iMDA6MDA6MDA6MDAiLz4KICAgPHhtcERNOnZpZGVvRnJhbWVTaXplCiAgICBzdERpbTp3PSI1MCIKICAgIHN0RGltOmg9IjUwIgogICAgc3REaW06dW5pdD0icGl4ZWwiLz4KICAgPHhtcERNOmFsdFRpbWVjb2RlCiAgICB4bXBETTp0aW1lVmFsdWU9IjAwOjAwOjAwOjAwIgogICAgeG1wRE06dGltZUZvcm1hdD0iMzBUaW1lY29kZSIvPgogICA8eG1wTU06SGlzdG9yeT4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJzYXZlZCIKICAgICAgc3RFdnQ6aW5zdGFuY2VJRD0iOTM1NzZjM2ItZTEwYy01ZGZmLTRmMzUtMDVlYzAwMDAwMDYyIgogICAgICBzdEV2dDp3aGVuPSIyMDE2LTA5LTAyVDE0OjI2OjA2KzA4OjAwIgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBBZG9iZSBNZWRpYSBFbmNvZGVyIENDIDIwMTQgKFdpbmRvd3MpIgogICAgICBzdEV2dDpjaGFuZ2VkPSIvIi8+CiAgICAgPHJkZjpsaQogICAgICBzdEV2dDphY3Rpb249ImNyZWF0ZWQiCiAgICAgIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MmNmNDE0NGEtOWVjZi0wYTQwLTljMDEtMzRiZjU0YjRhYjc4IgogICAgICBzdEV2dDp3aGVuPSIyMDE2LTA5LTAyVDE0OjEzOjUwKzA4OjAwIgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBBZnRlciBFZmZlY3RzIENDIDIwMTQgKFdpbmRvd3MpIi8+CiAgICAgPHJkZjpsaQogICAgICBzdEV2dDphY3Rpb249InNhdmVkIgogICAgICBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmU3M2M3NDU4LTJhMjUtZTE0Ni05NjZiLWIyNGYyOWZmM2Q0YyIKICAgICAgc3RFdnQ6d2hlbj0iMjAxNi0wOS0wMlQxNDoxNDozOCswODowMCIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgQWZ0ZXIgRWZmZWN0cyBDQyAyMDE0IChXaW5kb3dzKSIKICAgICAgc3RFdnQ6Y2hhbmdlZD0iL2NvbnRlbnQiLz4KICAgICA8cmRmOmxpCiAgICAgIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiCiAgICAgIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6OTgyMzc0NjMtNzU2NC00NzQ2LWIzMGEtZWUzMmViMGFmZTc4IgogICAgICBzdEV2dDp3aGVuPSIyMDE2LTA5LTAyVDE0OjI1OjM4KzA4OjAwIgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBBZnRlciBFZmZlY3RzIENDIDIwMTQgKFdpbmRvd3MpIgogICAgICBzdEV2dDpjaGFuZ2VkPSIvY29udGVudCIvPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJzYXZlZCIKICAgICAgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo0Njc3MzFhOS02ZTFmLTI0NDQtYTljNi0zM2M3ZjUxMmU1MWUiCiAgICAgIHN0RXZ0OndoZW49IjIwMTYtMDktMDJUMTQ6MjU6MzgrMDg6MDAiCiAgICAgIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIEFmdGVyIEVmZmVjdHMgQ0MgMjAxNCAoV2luZG93cykiCiAgICAgIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4KICAgICA8cmRmOmxpCiAgICAgIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiCiAgICAgIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6YWRmNWQzMjctOTAzYS03YzRiLTg0OTItNzEzMzE5YmFiZTczIgogICAgICBzdEV2dDp3aGVuPSIyMDE2LTA5LTAyVDE0OjI2OjA2KzA4OjAwIgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBBZG9iZSBNZWRpYSBFbmNvZGVyIENDIDIwMTQgKFdpbmRvd3MpIgogICAgICBzdEV2dDpjaGFuZ2VkPSIvIi8+CiAgICAgPHJkZjpsaQogICAgICBzdEV2dDphY3Rpb249InNhdmVkIgogICAgICBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjc0NDRiZjI0LWQ1OTUtZjA0Ni1hYWM5LTNjN2FiYzcwMDcwMCIKICAgICAgc3RFdnQ6d2hlbj0iMjAxNi0wOS0wMlQxNDoyNjowNiswODowMCIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgQWRvYmUgTWVkaWEgRW5jb2RlciBDQyAyMDE0IChXaW5kb3dzKSIKICAgICAgc3RFdnQ6Y2hhbmdlZD0iL21ldGFkYXRhIi8+CiAgICA8L3JkZjpTZXE+CiAgIDwveG1wTU06SGlzdG9yeT4KICAgPHhtcE1NOkRlcml2ZWRGcm9tCiAgICBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjNlNzEwMjgzLTVmZDMtYTc0Zi04MThmLTIwYTE3NmE0NGRjOCIKICAgIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M2U3MTAyODMtNWZkMy1hNzRmLTgxOGYtMjBhMTc2YTQ0ZGM4IgogICAgc3RSZWY6b3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjJjZjQxNDRhLTllY2YtMGE0MC05YzAxLTM0YmY1NGI0YWI3OCIvPgogICA8eG1wTU06SW5ncmVkaWVudHM+CiAgICA8cmRmOkJhZz4KICAgICA8cmRmOmxpCiAgICAgIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6Nzk3Mjc3Y2UtZjI2My02NjRkLWIyMGItZThiMjdjMzdhZmQwIgogICAgICBzdFJlZjpmcm9tUGFydD0idGltZTowZDUxMzAyNGYzMDcyMCIKICAgICAgc3RSZWY6dG9QYXJ0PSJ0aW1lOjBkNTEzMDI0ZjMwNzIwIgogICAgICBzdFJlZjptYXNrTWFya2Vycz0iTm9uZSIvPgogICAgPC9yZGY6QmFnPgogICA8L3htcE1NOkluZ3JlZGllbnRzPgogICA8eG1wTU06UGFudHJ5PgogICAgPHJkZjpCYWc+CiAgICAgPHJkZjpsaT4KICAgICAgPHJkZjpEZXNjcmlwdGlvbgogICAgICAgZGM6Zm9ybWF0PSJhcHBsaWNhdGlvbi92bmQuYWRvYmUuYWZ0ZXJlZmZlY3RzLmxheWVyIgogICAgICAgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyNDE4MTkxMS0yYmIzLWJhNGEtOTM3NC0wMDM3NThmOGZlNjEiPgogICAgICA8ZGM6dGl0bGU+CiAgICAgICA8cmRmOkFsdD4KICAgICAgICA8cmRmOmxpIHhtbDpsYW5nPSJ4LWRlZmF1bHQiPueZveiJsiDnuq/oibIgMTwvcmRmOmxpPgogICAgICAgPC9yZGY6QWx0PgogICAgICA8L2RjOnRpdGxlPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgICA8L3JkZjpsaT4KICAgICA8cmRmOmxpPgogICAgICA8cmRmOkRlc2NyaXB0aW9uCiAgICAgICBkYzpmb3JtYXQ9ImFwcGxpY2F0aW9uL3ZuZC5hZG9iZS5hZnRlcmVmZmVjdHMuY29tcCIKICAgICAgIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Nzk3Mjc3Y2UtZjI2My02NjRkLWIyMGItZThiMjdjMzdhZmQwIj4KICAgICAgPGRjOnRpdGxlPgogICAgICAgPHJkZjpBbHQ+CiAgICAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ij7lkIjmiJAgMTwvcmRmOmxpPgogICAgICAgPC9yZGY6QWx0PgogICAgICA8L2RjOnRpdGxlPgogICAgICA8eG1wTU06SW5ncmVkaWVudHM+CiAgICAgICA8cmRmOkJhZz4KICAgICAgICA8cmRmOmxpCiAgICAgICAgIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjQxODE5MTEtMmJiMy1iYTRhLTkzNzQtMDAzNzU4ZjhmZTYxIgogICAgICAgICBzdFJlZjpmcm9tUGFydD0idGltZTowZDUxMzAyNGYzMDcyMCIKICAgICAgICAgc3RSZWY6dG9QYXJ0PSJ0aW1lOjBkNTEzMDI0ZjMwNzIwIgogICAgICAgICBzdFJlZjptYXNrTWFya2Vycz0iTm9uZSIvPgogICAgICAgPC9yZGY6QmFnPgogICAgICA8L3htcE1NOkluZ3JlZGllbnRzPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgICA8L3JkZjpsaT4KICAgIDwvcmRmOkJhZz4KICAgPC94bXBNTTpQYW50cnk+CiAgPC9yZGY6RGVzY3JpcHRpb24+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgCjw/eHBhY2tldCBlbmQ9InciPz4AAAABbWRhdAAAAAAAAAVqAAAAFGWIgEAAZW/wo/GptEeqNlQoTxdwAAAACkGaAgWxBhb/csAAAAAKQZoECUwQWW9pwAAAAApBmgYMYCCq32DAAAAACkGaCBBgIKLfXUAAAAAKQZoKFGAgot9dQAAAAApBmgwYYCCi311AAAAACkGaDhxgIKLfXUAAAAAKQZoQIGAgmt9SQAAAAApBmhIkYCCa31JAAAAACkGaFChgIJrfUkAAAAAKQZoWLGAgmt9SQAAAAApBmhgwYCCa31JAAAAACkGaGjRgIJLfT0AAAAAKQZocOGAgkt9PQAAAAApBmh48YCCS309AAAAACkGaIEBgIJLfT0AAAAAKQZoiRGAgkt9PQAAAAApBmiRIYCCS309AAAAACkGaJkxgIIrfRkAAAAAKQZooUGAgit9GQAAAAApBmipUYCCK30ZAAAAACkGaLFhgIIrfRkAAAAAKQZouXGAgit9GQAAAAApBmjBgYCCK30ZAAAAACkGaMmRgIIrfRkAAAAAKQZo0aGAgit9GQAAAAApBmjZsYCCK30ZAAAAACkGaOHBgIIrfRkAAAAAKQZo6dGAgit9GQAAAABlliIAgAC1v8Pn4E/PD50MZxGv4XHDFJCeAAAAACUGaAgWxFW8JuAAAAApBmgQJTBFW/wm4AAAACkGaBgxgIq3/CbgAAAAKQZoIEGAirf8JuAAAAApBmgoUYCKt/wm4AAAACkGaDBhgIi3/CAgAAAAKQZoOHGAiLf8ICAAAAApBmhAgYCIt/wgIAAAACkGaEiRgIi3/CAgAAAAKQZoUKGAiLf8ICAAAAApBmhYsYCIt/wgIAAAACkGaGDBgIi3/CAgAAAAKQZoaNGAiLf8ICAAAAApBmhw4YCIt/wgIAAAACkGaHjxgIi3/CAgAAAAKQZogQGAiLf8ICAAAAApBmiJEYCIt/wgIAAAACkGaJEhgIi3/CAgAAAAKQZomTGAiLf8ICAAAAApBmihQYCIt/wgIAAAACkGaKlRgIi3/CAgAAAAKQZosWGAiLf8ICAAAAApBmi5cYCIt/wgIAAAACkGaMGBgIi3/CAgAAAAKQZoyZGAiLf8ICAAAAAlBmjRoYCa3BbwAAAAJQZo2bGAmtwW8AAAACUGaOHBgJrcFvAAAAAlBmjp0YCa3BbwAAAAeZYiAMAD2//7ZB8Cl8UUcqIJOQ3/DE2r3tJgRl6JgAAAACkGaAgWxH2/zJxQAAAALQZoECUwR9v/zJxQAAAALQZoGDGAj7f/zJxQAAAALQZoIEGAj7f/zJxQAAAALQZoKFGAj7f/zJxQAAAALQZoMGGAj7f/zJxQAAAALQZoOHGAj7f/zJxQAAAALQZoQIGAj7f/zJxQAAAALQZoSJGAj7f/zJxQAAAALQZoUKGAj7f/zJxQAAAALQZoWLGAj7f/zJxQAAAALQZoYMGAj7f/zJxQAAAALQZoaNGAj7f/zJxQAAAALQZocOGAj7f/zJxQAAAALQZoePGAj7f/zJxQAAAALQZogQGAhG3/6W7YAAAALQZoiRGAhG3/6W7YAAAALQZokSGAhG3/6W7YAAAALQZomTGAhG3/6W7YAAAALQZooUGAhG3/6W7YAAAALQZoqVGAhG3/6W7YAAAALQZosWGAhG3/6W7YAAAALQZouXGAhG3/6W7YAAAALQZowYGAhG3/6W7YAAAALQZoyZGAhG3/6W7YAAAALQZo0aGAhG3/6W7YAAAALQZo2bGAhG3/6W7YAAAALQZo4cGAhG3/6W7YAAAALQZo6dGAhG3/6W7YAAAAmZYiAEAAO2/72rvzLK0cLlS4dWXuyleQHLLVQFSji5XJgAAAAAQo=";
+        g(), Object.defineProperty(this, "muted", { get: function() { return N }, set: function(A) { N = A, y.muted = N } }), Object.defineProperty(this, "playbackRate", { get: function() { return L }, set: function(A) { L = A, y.playbackRate = L } }), Object.defineProperty(this, "bufferedTime", { get: function() { return y.buffered.end(0) } }), Object.defineProperty(this, "currentTime", { get: function() { return y.currentTime } }), Object.defineProperty(this, "currentTimeAndPlay", { set: function(A) { T = A, V ? (y.pause(), y.currentTime = T, setTimeout(function() {}, 10), setTimeout(function() {}, 30), setTimeout(function() {}, 60), setTimeout(function() { y.currentTime = T, X.play() }, 100)) : (y.currentTime = T, X.play()), o(-1, E) } }), Object.defineProperty(this, "currentTimeAndPause", { set: function(A) { k = A, y.pause(), y.currentTime = k, o(-1, E) } }), Object.defineProperty(this, "loop", { get: function() { return O }, set: function(A) { O = A } }), Object.defineProperty(this, "paused", { get: function() { return y.paused } }), Object.defineProperty(this, "duration", { get: function() { return y.duration } }), Object.defineProperty(this, "src", { get: function() { return f }, set: function(A) { X.pause(), f = A, P = !0, J = !0, S = !0 } }), Object.defineProperty(this, "visible", { get: function() { return "block" == y.style.display }, set: function(A) { A ? y.style.display = "block" : y.style.display = "none" } }), Object.defineProperty(this, "timesParam", { get: function() { return E }, set: function(A) { E = A, H ? E && 0 != E.length || (H = !1) : i() } }), Object.defineProperty(this, "poster", { get: function() { return y.poster }, set: function(A) { y.poster = A } }), Object.defineProperty(this, "isVideoCanAutoPlay", { get: function() { return h() } }), this.play = function() { F = !1, U = !1, x = !1, S = !1, t(), G(function() { V ? y.play() : y.play() }), v("play", "鎾斁") }, this.pause = function() { S = !0, y.pause(), v("pause", "鏆傚仠") }, this.replay = function() { F = !1, S = !1, U = !1, x = !1, o(-1, E), y.playbackRate < 0 && (y.playbackRate = 1), this.currentTimeAndPlay = 0, v("replay", "閲嶆挱") }, this.load = function() { X.visible = !1, U = !1, x = !1, F = !0, t(), b(), v("load", "寮€濮嬬紦鍐�") }, this.stopLoad = function() { X.visible = !1, x = !0, y.src = q, J = !0 }, this.activationLoad = function() { X.visible = !1, U = !0; var A = X.src;
+            X.src = q, t(), J = !0, X.src = A, b() } } window.requestAnimFrame = function() { return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(A) { window.setTimeout(A, 1e3 / 60) } }(), A.VideoPlayer = g }(this.MMD = this.MMD || {});

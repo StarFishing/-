@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=320,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="Copyright" content="Copyright (c) 2006-2016 TENCENT">
+    <title>mmd_videoPlayerAndPlug_v</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            /*text-align: center;*/
+            /*background-color: #cccccc;*/
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+
+        }
+
+
+        /*假如添加了video标签,可能会出现video标签默认置顶的情况,解决这个bug可以通过样式设置来规避;*/
+        .compatibleStyle {
+            backface-visibility:hidden;
+            -webkit-backface-visibility:hidden; /* Chrome 和 Safari */
+            -moz-backface-visibility:hidden;    /* Firefox */
+            -ms-backface-visibility:hidden;     /* Internet Explorer */
+            -webkit-perspective: 0;
+            -webkit-transform: translate3d(0,0,0);
+            visibility:visible;
+        }
+
+    </style>
+<!-- <style type="text/css"> .IIV::-webkit-media-controls-play-button,   .IIV::-webkit-media-controls-start-playback-button {  opacity: 0;    pointer-events: none;    width: 5px;}</style> -->
+</head>
+<body>
+
+<script src="mmd-plugin.min.1.0.2.js"></script>
+<script src="mmd.videoplayer.min.1.0.1.js"></script>
+
+<!--
+参数简易说明:
+1.view-mode = "v" "v"竖屏,"h"横屏;
+2.view-rotation="auto" 默认"auto" 自动旋转,"v"竖屏可视,"h"横屏可视;
+3.view-scale="exactfit" 缩放模式 默认"exactfit";
+                    "exactfit":高宽等于屏幕高宽;
+                    "noborder":裁剪铺满;
+                    "noscale":不缩放;
+                    "showall":显示全部;
+                    "width":宽度等于屏幕宽;
+                    "height":高度等于屏幕高;
+4.view-align="",默认为"" 居中;
+                    "t":靠顶;
+                    "l":靠左;
+                    "r":靠右;
+                    "b":靠底;
+                    可以结合一起用，比如"tl","tr","bl","br";
+5.view-width="400" 目标宽 默认"400";
+6.view-height="400" 目标高 默认"400";
+-->
+
+<div view-mode="h" view-rotation="auto" view-scale="exactfit" view-width="426" view-height="240">
+    <div id="loading"  style="position: absolute;">
+        <img style="width: 100%;height: 400px" src="http://game.gtimg.cn/images/tgideas/act/a20170330mmdVideoPlayer/videoPlayerDemo/mmd_videoPlayerAndPlug_v_loading.jpg">
+    </div>
+    <div style="position: absolute;">
+        <video id="video" width="426" height="240" style="display:none;"></video>
+    </div>
+    <div id="mask" class="compatibleStyle" style="display: none;width: 100%;height: 100vh;background-color:transparent"> 
+    </div>
+    <div id="end" class="compatibleStyle" style="position: absolute;display: none;">
+        <img style="width: 100%;height: 400px" src="http://game.gtimg.cn/images/tgideas/act/a20170330mmdVideoPlayer/videoPlayerDemo/mmd_videoPlayerAndPlug_v_end.jpg">
+    </div>
+    <button id="startPlay" class="compatibleStyle" style="position: absolute; width: 130px; height: 60px; background-color: rgb(255, 255, 255); display: block; bottom: 10%; right: 5%;">需要交互才能播放,点我播放视频</button>
+    <button id="toEnd" class="compatibleStyle" style="position: absolute;width: 130px;height: 60px;background-color: #ffffff;display:none;bottom: 10%;right: 15%" onclick="videoPlayer.currentTimeAndPlay=235;document.getElementById('toEnd').style.display='none';">不看了,跳转到落地页附近</button>
+</div>
+
+<script>
+    var src='http://pczr1g7oj.bkt.clouddn.com/Alan%20Walker,Au%EF%BC%8FRa,Tomine%20Harket%20-%20Darkside.mp4';
+
+    // 禁止双击放大事件
+    var lastTouchEnd = 0;
+    document.documentElement.addEventListener('touchend', function (event) {
+        var now = Date.now();
+        // 检测两次点击事件间隔
+        if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+        }
+        lastTouchEnd = now;
+        }, false);
+
+    // 禁止页面的滑动操作
+    document.body.addEventListener('touchmove', function(e) {
+　　      e.stopPropagation();//阻止默认事件
+　　      e.preventDefault();//阻止冒泡
+        },{ passive: false });
+
+    // 当屏幕上已经有一个手指，再有一个手指放上去时触发
+    // document.body.addEventListener('gesturestart', function (event) {
+    //       event.preventDefault();
+    //       if (event.targetTouches.length > 1) {
+    //             event.preventDefault();
+    //           }
+    //     });
+    var videoPlayer=new MMD.VideoPlayer(
+        {
+            videoElement:document.getElementById('video'),//[必填],video元素;
+            src:src,//[必填],video src;
+            loop:false,//[可选],是否循环,默认false,true为循环;
+            muted:false,//[可选],是否静音,默认false;
+            poster:'',//[可选],video默认图片;
+            timesParam:[
+                {name:'showSkipBtn',time:3}
+                ],//[可选],video currenttime时间点;
+            onTimes:function(name){
+                console.log(name)
+                switch (name)
+                {
+                    case 'showSkipBtn':
+                        //to do;
+                        document.getElementById('toEnd').style.display='block';
+                        break;
+                }
+            },//[可选],video currenttime回调;
+            onStart:function(){
+                // 为了解决视频的双指放大问题加的遮罩层，用以屏蔽对视频的操作
+                var mask=document.getElementById('mask');
+                mask.style.display="block";
+                var ss=document.getElementById('video');
+                // 禁止双指缩放功能，经测试发现不可以禁止iOS视频的双指放大，iOS依然可以打开默认播放器
+                ss.addEventListener('touchstart', function (e) {
+                if (e.targetTouches.length > 1) {
+                    e.preventDefault();
+                }
+            }, false);
+                //  ss.addEventListener('gesturestart', function (event) {
+                //   event.preventDefault();
+                // },false);
+      
+                document.getElementById('loading').style.display='none';
+                console.log('video start');
+            },//[可选],video第一个画面出现回调;
+            onEnd:function(){
+                var mask=document.getElementById('mask');
+                mask.style.display="none";
+                document.getElementById('end').style.display='block';
+                console.log('video end');
+            }//[可选],video播放完成回调;
+        }
+    );
+
+//    console.log('videoPlayer.isVideoCanAutoPlay:',videoPlayer.isVideoCanAutoPlay);
+    var btn=document.getElementById('startPlay');
+   
+        btn.style.display='block';
+        btn.addEventListener('click',function(e)
+        {
+            btn.style.display='none';
+            videoPlayer.play();
+        });
+
+    // 默认为自动播放，isVideoCanAutoPlay默认为true
+    // 但是由于Chrome浏览器限制，自动播放不生效，但是微信Safari等生效，为了避免自动播放，不进行自动播放判断
+    // if(videoPlayer.isVideoCanAutoPlay)
+    // {
+    //     videoPlayer.play();
+    // }
+    // else
+    // {
+    //     //others
+    // }
+    // 声明：因为Chrome浏览器限制，要让视频一开始静音才能播放，否则视频无法播放，或者让用户交互播放视频
+    // 对于Android用户，需要将视频与文件放在同一服务器下，如果采用外链方式会导致Android用户微信手Q用自己播放器打开
+</script>
+
+
+</body>
+</html>
